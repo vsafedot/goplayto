@@ -1,7 +1,9 @@
 import axios from 'axios';
 
+// In production, set VITE_API_URL to your backend (e.g. https://playto-api.onrender.com/api/v1)
+// In local dev, the Vite proxy forwards /api to localhost:8000
 const client = axios.create({
-  baseURL: '/api/v1',
+  baseURL: import.meta.env.VITE_API_URL || '/api/v1',
   headers: {
     'Content-Type': 'application/json',
   },
