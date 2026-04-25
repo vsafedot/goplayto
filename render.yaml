@@ -55,6 +55,4 @@ services:
       - key: PYTHON_VERSION
         value: "3.12.0"
       - key: REDIS_URL
-        # Note: Render doesn't offer free managed Redis. 
-        # Create a free database on Upstash (https://upstash.com) and replace this URL in your Render Dashboard.
-        value: "redis://localhost:6379"
+        value: "rediss://default:gQAAAAAAAQWBAAIgcDE5ZmJkMjhjMmVmM2M0MmU3YmMwZWNhMzFmZjM0MTQwYg@right-bedbug-66945.upstash.io:6379"
