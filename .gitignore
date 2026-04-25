@@ -1,0 +1,79 @@
+# ── Python ────────────────────────────────────
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.Python
+*.egg-info/
+dist/
+build/
+*.egg
+*.whl
+pip-log.txt
+pip-delete-this-directory.txt
+
+# ── Virtual Environments ──────────────────────
+venv/
+.venv/
+env/
+ENV/
+
+# ── Django ────────────────────────────────────
+*.log
+local_settings.py
+db.sqlite3
+db.sqlite3-journal
+staticfiles/
+media/
+
+# ── Environment Variables ─────────────────────
+.env
+.env.*
+!.env.example
+
+# ── Docker ────────────────────────────────────
+postgres_data/
+
+# ── Node / Frontend ──────────────────────────
+node_modules/
+frontend/dist/
+frontend/.vite/
+.cache/
+*.tsbuildinfo
+
+# ── IDE / Editor ─────────────────────────────
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.project
+.classpath
+.settings/
+
+# ── OS Files ─────────────────────────────────
+.DS_Store
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# ── Celery ───────────────────────────────────
+celerybeat-schedule
+celerybeat-schedule.dir
+celerybeat-schedule.bak
+celerybeat-schedule.dat
+celerybeat.pid
+
+# ── Coverage & Testing ──────────────────────
+htmlcov/
+.coverage
+.coverage.*
+.pytest_cache/
+.tox/
+nosetests.xml
+coverage.xml
+
+# ── Misc ─────────────────────────────────────
+*.bak
+*.tmp
+*.temp
