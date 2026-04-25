@@ -1,0 +1,97 @@
+# Render Blueprint — deploy all services with one click
+# https://render.com/docs/blueprint-spec
+
+databases:
+  - name: playto-db
+    plan: free
+    databaseName: playto
+    user: playto
+
+services:
+  # ── Django API ──────────────────────────────────
+  - type: web
+    name: playto-api
+    runtime: python
+    plan: free
+    rootDir: backend
+    buildCommand: |
+      pip install -r requirements.txt
+      python manage.py collectstatic --noinput
+      python manage.py migrate
+      python manage.py seed_data
+    startCommand: gunicorn playto.wsgi:application --bind 0.0.0.0:$PORT --workers 3 --timeout 60
+    envVars:
+      - key: DJANGO_SECRET_KEY
+        generateValue: true
+      - key: DJANGO_DEBUG
+        value: "False"
+      - key: ALLOWED_HOSTS
+        value: ".onrender.com"
+      - key: POSTGRES_DB
+        fromDatabase:
+          name: playto-db
+          property: database
+      - key: POSTGRES_USER
+        fromDatabase:
+          name: playto-db
+          property: user
+      - key: POSTGRES_PASSWORD
+        fromDatabase:
+          name: playto-db
+          property: password
+      - key: POSTGRES_HOST
+        fromDatabase:
+          name: playto-db
+          property: host
+      - key: POSTGRES_PORT
+        fromDatabase:
+          name: playto-db
+          property: port
+      - key: DATABASE_URL
+        fromDatabase:
+          name: playto-db
+          property: connectionString
+      - key: PYTHON_VERSION
+        value: "3.12.0"
+
+  # ── Celery Worker ───────────────────────────────
+  - type: worker
+    name: playto-celery-worker
+    runtime: python
+    plan: free
+    rootDir: backend
+    buildCommand: pip install -r requirements.txt
+    startCommand: celery -A playto worker --loglevel=info --concurrency=2
+    envVars:
+      - key: DJANGO_SECRET_KEY
+        fromService:
+          name: playto-api
+          type: web
+          envVarKey: DJANGO_SECRET_KEY
+      - key: POSTGRES_DB
+        fromDatabase:
+          name: playto-db
+          property: database
+      - key: POSTGRES_USER
+        fromDatabase:
+          name: playto-db
+          property: user
+      - key: POSTGRES_PASSWORD
+        fromDatabase:
+          name: playto-db
+          property: password
+      - key: POSTGRES_HOST
+        fromDatabase:
+          name: playto-db
+          property: host
+      - key: POSTGRES_PORT
+        fromDatabase:
+          name: playto-db
+          property: port
+      - key: REDIS_URL
+        fromService:
+          name: playto-api
+          type: web
+          envVarKey: REDIS_URL
+      - key: PYTHON_VERSION
+        value: "3.12.0"

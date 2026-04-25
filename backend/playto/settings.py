@@ -1,12 +1,18 @@
 # Django settings for Playto payout engine
 import os
 from pathlib import Path
+import dj_database_url
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 SECRET_KEY = os.getenv('DJANGO_SECRET_KEY', 'dev-secret-change-in-production-abc123xyz')
 DEBUG = os.getenv('DJANGO_DEBUG', 'True') == 'True'
 ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', '*').split(',')
+
+# Render sets this automatically
+RENDER_EXTERNAL_HOSTNAME = os.getenv('RENDER_EXTERNAL_HOSTNAME')
+if RENDER_EXTERNAL_HOSTNAME:
+    ALLOWED_HOSTS.append(RENDER_EXTERNAL_HOSTNAME)
 
 # ── Applications ──────────────────────────────
 INSTALLED_APPS = [
@@ -55,7 +61,15 @@ TEMPLATES = [
 WSGI_APPLICATION = 'playto.wsgi.application'
 
 # ── Database ──────────────────────────────────
-if os.getenv('USE_SQLITE', 'False') == 'True':
+if os.getenv('DATABASE_URL'):
+    # Render / production: parse DATABASE_URL connection string
+    DATABASES = {
+        'default': dj_database_url.config(
+            conn_max_age=60,
+            ssl_require=not DEBUG,
+        )
+    }
+elif os.getenv('USE_SQLITE', 'False') == 'True':
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.sqlite3',
