@@ -52,3 +52,8 @@ To maintain a robust infrastructure, the system is deployed using:
 If you are evaluating this locally:
 1. The backend automatically falls back to `SQLite` and an `In-Memory Broker` for Celery if `USE_SQLITE=True` and `USE_MEMORY_BROKER=True` are set in the `.env` file. This means you can evaluate the logic locally without needing to install Postgres or Redis.
 2. The frontend proxy automatically routes `/api/v1` to `localhost:8000` during local development (`npm run dev`).
+
+---
+
+**Signed,**  
+*Siddharth Nain*
